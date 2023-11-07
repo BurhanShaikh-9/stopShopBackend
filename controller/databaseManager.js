@@ -4,11 +4,7 @@ const mongoURI = configs.mongoDbUrl;
 
 const dbConnection = async () => {
     try {
-        await  mongoose.connect(mongoURI,
-            {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
-            }).then((con) => {
+        await  mongoose.connect(mongoURI).then((con) => {
                 console.log("DB is connected", con.connection.host);
             })
     }
