@@ -1,20 +1,19 @@
-
 const express = require('express');
+const bodyParser = require('body-parser');
 const app = express();
 const cors = require('cors');
 const dbConnection  = require('./controller/databaseManager')
-app.use(cors({
-    origin: '*',
-}));
+dbConnection();
+const userRoute = require('./routes/user');
 
 const port = process.env.PORT || 5000;
 
-app.get('/', (req, res) => {
-    res.send("server is running")
-})
+app.use(bodyParser.json());
 
-dbConnection();
+app.use(cors({origin: '*'}));
+app.get('/', (req, res) => {res.send("server is running")})
 
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-}); 
+app.use('/api/', userRoute); 
+
+
+app.listen(port, () => {console.log(`Server is running on port ${port}`)}); 
