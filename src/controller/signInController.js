@@ -23,7 +23,6 @@ const signIn = async (req, res) => {
             isAdmin = true;
         }
         if (passwordMatch) {
-            console.log(passwordMatch, 'passwordMatchedd');
             const { password, ...newExistingAdmin } = !isAdmin ? existingUser.toObject() : existingAdmin.toObject();
 
             return res.status(200).json({ message: "Sign In Successful", user: newExistingAdmin });
