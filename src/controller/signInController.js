@@ -1,6 +1,8 @@
 const AdminModel = require("../model/admin");
 const UserModel = require("../model/user");
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { jwtSecret } = require('../../constant')
 
 
 const signIn = async (req, res) => {
@@ -23,13 +25,14 @@ const signIn = async (req, res) => {
             isAdmin = true;
         }
         if (passwordMatch) {
+            const user = isAdmin ? existingAdmin : existingUser;
+            const token = jwt.sign({ user }, jwtSecret, { expiresIn: '1h' });
             const { password, ...newExistingAdmin } = !isAdmin ? existingUser.toObject() : existingAdmin.toObject();
-
+            res.cookie("token", token, { httpOnly: true });
             return res.status(200).json({ message: "Sign In Successful", user: newExistingAdmin });
         } else {
             return res.status(401).json({ message: "Incorrect Password" });
         }
-
 
     }
     catch (error) {
