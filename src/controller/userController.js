@@ -10,6 +10,7 @@ const addUser = async (req, res) => {
 
     try {
         const existingAdmin = await modelUser.findOne({ email });
+        
         if (existingAdmin) {
             return res
                 .status(400)
