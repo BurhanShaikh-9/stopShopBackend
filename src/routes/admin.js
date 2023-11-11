@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {addAdmin, getAllAdmin, getSingleAdmin} = require('../controller/adminController')
+const {addAdmin, getAllAdmin, getSingleAdmin} = require('../controller/admin')
 const  multerUpload = require('../middleware/multer')
 
 router.post("/admin", multerUpload.single('image'), addAdmin);
