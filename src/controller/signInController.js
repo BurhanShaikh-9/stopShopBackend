@@ -40,7 +40,7 @@ const signIn = async (req, res) => {
 
     }
     catch (error) {
-        // console.log(error, 'error');
+        console.log(error, 'error');
         res.status(500).json({
             message: "An error occurred while Signing.",
             error,
