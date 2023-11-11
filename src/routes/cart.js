@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-// const {addAdmin, getAllAdmin, getSingleAdmin} = require('../controller/cart')
+const {createCart} = require('../controller/cart')
 
-// router.post("/cart", addAdmin);
+router.post("/cart", createCart);
 
 module.exports = router;

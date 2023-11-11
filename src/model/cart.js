@@ -4,13 +4,15 @@ const cartScheme = new mongoose.Schema(
         userId: {
             type: String,
         },
-        products:[
+        products: [
             {
-                itemId: Number,
-                quantity: Number
+                itemId: { type: String },
+                quantity: { type: Number }
             }
         ],
-        totalAmount: Number
+        totalAmount: {
+            type: Number
+        }
     }
 );
 
