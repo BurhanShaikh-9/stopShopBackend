@@ -9,7 +9,7 @@ function authenticateToken(req, res, next) {
         return res.sendStatus(401); 
     }
 
-    jwt.verify(token, secretKey, (err, user) => {
+    jwt.verify(token, jwtSecret, (err, user) => {
         if (err) {
             return res.sendStatus(403); 
         }
