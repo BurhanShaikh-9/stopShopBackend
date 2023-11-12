@@ -28,11 +28,11 @@ const signIn = async (req, res) => {
             const user = isAdmin ? existingAdmin : existingUser;
             const token = jwt.sign({ user }, jwtSecret, { expiresIn: '1h' });
             const { password, ...newExistingAdmin } = !isAdmin ? existingUser.toObject() : existingAdmin.toObject();
-            // res.cookie("token", token, {     
-            //     httpOnly: false,
-            //     sameSite: "None",
-            //     secure: false,
-            //  });
+            res.cookie("token", token, {     
+                httpOnly: false,
+                sameSite: "None",
+                secure: false,
+             });
             return res.status(200).json({ message: "Sign In Successful", user: newExistingAdmin, token: token });
         } else {
             return res.status(401).json({ message: "Incorrect Password" });
