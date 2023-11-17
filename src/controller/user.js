@@ -53,7 +53,6 @@ const getAllUsers = async (req, res) => {
     }
 };
 
-
 const getSingleUser = async (req, res) => {
     const userId = req.params.userId;
 
@@ -72,6 +71,7 @@ const getSingleUser = async (req, res) => {
         });
     }
 };
+
 module.exports = {
     addUser,
     getAllUsers,

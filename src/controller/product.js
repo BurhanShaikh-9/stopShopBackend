@@ -44,8 +44,7 @@ const addProduct = async (req, res) => {
             error,
         });
     }
-}
-
+};
 
 const getAllProduct = async (req, res) => {
     try {
@@ -64,7 +63,7 @@ const getSingleProduct = async (req, res) => {
     const productId = req.params.productId;
 
     try {
-        const product = await Product.findOne({_id: productId , isDeleted: 0 });
+        const product = await Product.findOne({ _id: productId, isDeleted: 0 });
 
         if (!product) {
             return res.status(404).json({ message: "Product not found" });
@@ -79,8 +78,31 @@ const getSingleProduct = async (req, res) => {
     }
 };
 
+const getProductBySearchTag = async (req, res) => {
+    const searchTag = req.params.searchProduct;
+
+    try {
+        const products = await Product.find({
+            productSearchTags: { $regex: new RegExp(searchTag, 'i') },
+        });
+
+        if (!products || products.length === 0) {
+            return res.status(404).json({ message: "Product not found" });
+        }
+
+        res.status(200).json(products);
+    } catch (error) {
+        console.error(error, 'error');
+        res.status(500).json({
+            message: "An error occurred while fetching the Product.",
+            error,
+        });
+    }
+};
+
 module.exports = {
     addProduct,
+    getProductBySearchTag,
     getSingleProduct,
     getAllProduct
 };
