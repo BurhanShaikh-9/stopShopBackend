@@ -6,9 +6,9 @@ const { authenticateToken } = require('../middleware/jwtCookie');
 
 
 
-router.post("/admin", authenticateToken, multerUpload.single('image'), addAdmin);
-router.get("/admin", authenticateToken, getAllAdmin);
-router.get("/admin/:adminId", authenticateToken, getSingleAdmin);
+router.post("/admin", multerUpload.single('image'), addAdmin);
+router.get("/admin", getAllAdmin);
+router.get("/admin/:adminId", getSingleAdmin);
 
 
 module.exports = router;
