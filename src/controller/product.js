@@ -56,6 +56,7 @@ const getAllProduct = async (req, res) => {
         });
     }
 };
+
 const getPaginatedProducts = async (req, res) => {
     const { page = 1, limit = 10, search = '' } = req.query;
 
