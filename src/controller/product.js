@@ -5,7 +5,6 @@ const bcrypt = require('bcrypt');
 
 const addProduct = async (req, res) => {
     const {
-        image,
         productName,
         productColor,
         productSize,
@@ -15,27 +14,26 @@ const addProduct = async (req, res) => {
     } = req.body;
 
     try {
-
-        const result = await cloudinary.uploader.upload(req.file.path);
         if (!req.file) {
             return res.status(400).json({ error: "No image file provided" });
         }
-        else {
-            const product = new Product({
-                image: result.secure_url,
-                productName,
-                productColor,
-                productSize,
-                productAmount,
-                productQuantity,
-                productSearchTags,
-                isDeleted: 0
-            });
 
-            await product.save();
-            res.status(201).json({ message: "Product added successfully." });
-        }
+        console.log(req.file, 'prooo')
+        const result = await cloudinary.uploader.upload(req.file.path);
 
+        const product = new Product({
+            image: result.secure_url,
+            productName,
+            productColor,
+            productSize,
+            productAmount,
+            productQuantity,
+            productSearchTags,
+            isDeleted: 0
+        });
+
+        await product.save();
+        res.status(201).json({ message: "Product added successfully." });
     }
     catch (error) {
         console.log(error, 'error');
@@ -54,6 +52,42 @@ const getAllProduct = async (req, res) => {
         console.error(error, 'error');
         res.status(500).json({
             message: "An error occurred while fetching users.",
+            error,
+        });
+    }
+};
+const getPaginatedProducts = async (req, res) => {
+    const { page = 1, limit = 10, search = '' } = req.query;
+
+    try {
+        const skip = (page - 1) * limit;
+        const query = { isDeleted: 0 };
+
+        if (search) {
+            query.$or = [
+                { productName: { $regex: search, $options: 'i' } },
+                { productColor: { $regex: search, $options: 'i' } },
+                { productSize: { $regex: search, $options: 'i' } },
+                { productSearchTags: { $regex: search, $options: 'i' } },
+            ];
+        }
+
+        const total = await Product.countDocuments(query);
+        const products = await Product.find(query)
+            .skip(skip)
+            .limit(parseInt(limit));
+
+        res.status(200).json({
+            total,
+            page: parseInt(page),
+            limit: parseInt(limit),
+            totalPages: Math.ceil(total / limit),
+            products,
+        });
+    } catch (error) {
+        console.error(error, 'error');
+        res.status(500).json({
+            message: "An error occurred while fetching products.",
             error,
         });
     }
@@ -104,5 +138,6 @@ module.exports = {
     addProduct,
     getProductBySearchTag,
     getSingleProduct,
-    getAllProduct
+    getAllProduct,
+    getPaginatedProducts
 };
