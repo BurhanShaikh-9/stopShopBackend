@@ -10,6 +10,7 @@ const routeModules = [
     require('./src/routes/signIn'),
     require('./src/routes/product'),
     require('./src/routes/cart'),
+    require('./src/routes/dashboard'),
 ];
 
 const port = process.env.PORT || 5000;
