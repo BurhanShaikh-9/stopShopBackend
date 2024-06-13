@@ -67,9 +67,9 @@ const getPaginatedProducts = async (req, res) => {
         if (search) {
             query.$or = [
                 { productName: { $regex: search, $options: 'i' } },
-                { productColor: { $regex: search, $options: 'i' } },
-                { productSize: { $regex: search, $options: 'i' } },
-                { productSearchTags: { $regex: search, $options: 'i' } },
+                // { productColor: { $regex: search, $options: 'i' } },
+                // { productSize: { $regex: search, $options: 'i' } },
+                // { productSearchTags: { $regex: search, $options: 'i' } },
             ];
         }
 
@@ -135,10 +135,35 @@ const getProductBySearchTag = async (req, res) => {
     }
 };
 
+const deleteProduct = async (req, res) => {
+    const productId = req.params.productId;
+
+    try {
+        const product = await Product.findOneAndUpdate(
+            { _id: productId, isDeleted: 0 },
+            { isDeleted: 1 },
+            { new: true }
+        );
+
+        if (!product) {
+            return res.status(404).json({ message: "Product not found or already deleted" });
+        }
+
+        res.status(200).json({ message: "Product deleted successfully", product });
+    } catch (error) {
+        console.error(error, 'error');
+        res.status(500).json({
+            message: "An error occurred while deleting the product.",
+            error,
+        });
+    }
+};
+
 module.exports = {
     addProduct,
     getProductBySearchTag,
     getSingleProduct,
     getAllProduct,
-    getPaginatedProducts
+    getPaginatedProducts,
+    deleteProduct
 };
